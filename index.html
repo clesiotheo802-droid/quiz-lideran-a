@@ -571,6 +571,7 @@
     .cover-stats { gap: 20px; }
   }
 </style>
+<script async src="https://tally.so/widgets/embed.js"></script>
 </head>
 <body>
 
@@ -661,21 +662,22 @@
           <div class="capture-box">
             <div class="capture-title">Seu relatório está pronto</div>
             <div class="capture-sub">Preencha abaixo para receber agora no seu e-mail o diagnóstico completo com seus gaps prioritários e o plano de ação personalizado para os próximos 30 dias.</div>
-            <div class="field">
-              <label>Nome</label>
-              <input type="text" id="f-nome" placeholder="Seu nome completo">
-            </div>
-            <div class="field">
-              <label>E-mail</label>
-              <input type="email" id="f-email" placeholder="seu@email.com">
-            </div>
-            <div class="field">
-              <label>WhatsApp <span style="opacity:.5;font-weight:400">(opcional)</span></label>
-              <input type="tel" id="f-phone" placeholder="(00) 00000-0000">
-            </div>
-            <button class="btn-capture" onclick="enviarLead()">Quero receber meu relatório e plano de ação →</button>
-            <div class="capture-privacy">Gratuito. Sem spam. Seu relatório chega em menos de 5 minutos.</div>
           </div>
+          <div style="margin-top:16px;border-radius:16px;overflow:hidden">
+            <iframe
+              id="tally-iframe"
+              src="https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+              loading="lazy"
+              width="100%"
+              height="320"
+              frameborder="0"
+              marginheight="0"
+              marginwidth="0"
+              title="Quiz da Liderança — Captura de Lead"
+              style="background:transparent;border:none"
+            ></iframe>
+          </div>
+          <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.35);margin-top:10px;padding:0 32px 28px">Gratuito. Sem spam. Seu relatório chega em menos de 5 minutos.</div>
         </div>
 
         <div id="resultado-completo" style="display:none">
@@ -843,41 +845,28 @@ function mostrarResultado() {
   window._quizScores = scores;
   window._quizGaps = sorted.filter(function(g){return g.s < 70;}).slice(0,3);
   if (window._quizGaps.length === 0) window._quizGaps = sorted.slice(0,2);
+
+  // Atualiza iframe com score e persona como parâmetros ocultos
+  var iframe = document.getElementById("tally-iframe");
+  if (iframe) {
+    iframe.src = "https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&Score=" + geral + "&Persona=" + encodeURIComponent(persona.nome);
+  }
 }
 
 function enviarLead() {
-  var nome = document.getElementById("f-nome").value.trim();
-  var email = document.getElementById("f-email").value.trim();
-  if (!nome || !email) {
-    alert("Preencha nome e e-mail para receber o relatório.");
-    return;
-  }
-  var score = window._quizScore || 0;
-  var persona = window._quizPersona || "";
-
-  // Integração Tally ativa — Form ID: pbzLYZ
-  var tallyData = new FormData();
-  tallyData.append('fields[nome]', nome);
-  tallyData.append('fields[email]', email);
-  tallyData.append('fields[whatsapp]', document.getElementById('f-phone').value.trim());
-  tallyData.append('fields[score]', score);
-  tallyData.append('fields[persona]', persona);
-
-  fetch('https://tally.so/r/pbzLYZ', {
-    method: 'POST',
-    body: tallyData
-  }).catch(function() {
-    // fallback silencioso — lead salvo localmente
-    console.log('Lead capturado:', nome, email, score, persona);
-  });
-
-  document.getElementById("form-area").style.display = "none";
-  document.getElementById("resultado-completo").style.display = "block";
-  window.scrollTo({ top: 0, behavior: "smooth" });
-
-  // Renderizar pilares e gaps (já calculados)
-  renderResultadoCompleto();
+  // Não usado mais — Tally iframe cuida do envio
+  // Mantido para compatibilidade
 }
+
+// Escuta o evento de submit do Tally iframe
+window.addEventListener("message", function(e) {
+  if (e.data && e.data.type === "tally-form-submitted") {
+    document.getElementById("form-area").style.display = "none";
+    document.getElementById("resultado-completo").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    renderResultadoCompleto();
+  }
+});
 
 function renderResultadoCompleto() {
   var scores = window._quizScores || [];
