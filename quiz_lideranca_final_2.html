@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz da Liderança — Descubra onde você está travando | CTS</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #101A4E;
+    --navy-dark: #0A1035;
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-mid: #085041;
+    --gold: #C9A84C;
+    --gold-light: #FDF6E3;
+    --light: #D8DADC;
+    --amber: #EF9F27;
+    --red: #E24B4A;
+    --white: #FFFFFF;
+    --off-white: #F8F7F4;
+    --text: #1A1A1A;
+    --text-muted: #666666;
+    --border: rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    min-height: 100vh;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* Background pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 0%, rgba(16,26,78,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(29,158,117,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0 0;
+    margin-bottom: 32px;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+  }
+  .logo span { color: var(--teal); }
+  .header-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--teal-mid);
+    background: var(--teal-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Card */
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 2px 24px rgba(16,26,78,0.07), 0 1px 4px rgba(16,26,78,0.04);
+    overflow: hidden;
+    transition: box-shadow .3s;
+  }
+
+  /* Screen management */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* === COVER === */
+  .cover-top {
+    background: var(--navy);
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-top::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(29,158,117,0.15);
+  }
+  .cover-top::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.08);
+  }
+  .cover-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(201,168,76,0.15);
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .cover-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .cover-sub {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.7);
+    position: relative;
+    z-index: 1;
+    max-width: 440px;
+  }
+  .cover-bottom { padding: 32px 40px 40px; }
+  .cover-stats {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat { }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .stat-label { font-size: 12px; color: var(--text-muted); }
+  .pilares-preview {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .pilar-chip {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--off-white);
+  }
+  .btn-start {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    transition: background .2s, transform .1s;
+  }
+  .btn-start:hover { background: var(--navy-dark); transform: translateY(-1px); }
+  .btn-start:active { transform: translateY(0); }
+  .cover-note { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+
+  /* === QUIZ === */
+  .quiz-header {
+    padding: 28px 40px 0;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+  .quiz-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .q-counter {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+  .q-pilar-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+    background: var(--teal-light);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  .progress-track {
+    width: 100%;
+    height: 3px;
+    background: var(--light);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 3px;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    border-radius: 2px;
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+  }
+  .quiz-body { padding: 32px 40px; }
+  .q-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--navy);
+    margin-bottom: 28px;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 14px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all .18s;
+    position: relative;
+  }
+  .opt::before {
+    content: '';
+    position: absolute;
+    left: 18px; top: 50%;
+    transform: translateY(-50%);
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid var(--light);
+    transition: all .18s;
+    flex-shrink: 0;
+  }
+  .opt { padding-left: 46px; }
+  .opt:hover { border-color: var(--teal); background: var(--teal-light); }
+  .opt.selected {
+    border-color: var(--teal);
+    background: var(--teal-light);
+    color: var(--teal-mid);
+    font-weight: 500;
+  }
+  .opt.selected::before {
+    background: var(--teal);
+    border-color: var(--teal);
+    box-shadow: inset 0 0 0 3px white;
+  }
+  .quiz-footer {
+    padding: 0 40px 32px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .btn-next {
+    padding: 12px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s, transform .1s;
+  }
+  .btn-next.visible { opacity: 1; pointer-events: auto; }
+  .btn-next:hover { background: var(--navy-dark); transform: translateY(-1px); }
+
+  /* === RESULT === */
+  .result-top {
+    background: var(--navy);
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-top::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    background: rgba(29,158,117,0.1);
+  }
+  .result-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+    position: relative; z-index: 1;
+  }
+  .score-ring {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    border: 5px solid rgba(255,255,255,0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    position: relative; z-index: 1;
+    background: rgba(255,255,255,0.05);
+  }
+  .score-ring-fill {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    border-top-color: var(--teal);
+    border-right-color: var(--teal);
+    transform: rotate(-45deg);
+    transition: transform 1s;
+  }
+  .score-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 46px;
+    color: var(--white);
+    line-height: 1;
+    position: relative; z-index: 1;
+  }
+  .score-lbl {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+    position: relative; z-index: 1;
+  }
+  .persona-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 16px;
+    border-radius: 20px;
+    background: var(--gold);
+    color: var(--navy);
+    margin-bottom: 12px;
+    position: relative; z-index: 1;
+  }
+  .result-tagline {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .result-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+  .result-body { padding: 32px 40px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .pilares-grid { margin-bottom: 28px; }
+  .pilar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .pilar-name { font-size: 13px; color: var(--text); min-width: 115px; }
+  .pilar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--off-white);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .pilar-fill {
+    height: 6px;
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(.4,0,.2,1);
+  }
+  .pilar-score {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 28px;
+    text-align: right;
+  }
+  .gaps-list { margin-bottom: 28px; }
+  .gap-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .gap-item:last-child { border-bottom: none; }
+  .gap-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(239,159,39,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+  .gap-text { flex: 1; }
+  .gap-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .gap-sub { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* Capture form */
+  .capture-box {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 0;
+  }
+  .capture-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .capture-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .field {
+    margin-bottom: 12px;
+  }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 5px;
+    letter-spacing: 0.03em;
+  }
+  .field input {
+    width: 100%;
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    color: var(--white);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .field input::placeholder { color: rgba(255,255,255,0.3); }
+  .field input:focus { border-color: var(--teal); background: rgba(255,255,255,0.12); }
+  .btn-capture {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    background: var(--teal);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    letter-spacing: 0.01em;
+  }
+  .btn-capture:hover { background: #188a63; transform: translateY(-1px); }
+  .capture-privacy {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  /* Success */
+  .success-box {
+    background: var(--teal-light);
+    border-radius: 16px;
+    padding: 28px 32px;
+    text-align: center;
+  }
+  .success-icon { font-size: 32px; color: var(--teal); margin-bottom: 12px; }
+  .success-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--teal-mid);
+    margin-bottom: 6px;
+  }
+  .success-sub { font-size: 13px; color: var(--teal-mid); line-height: 1.6; margin-bottom: 20px; }
+  .btn-lideria {
+    display: inline-block;
+    padding: 12px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .2s;
+    text-decoration: none;
+  }
+  .btn-lideria:hover { background: var(--navy-dark); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px 0 0;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .cover-top, .cover-bottom, .quiz-body, .result-body, .quiz-footer { padding-left: 24px; padding-right: 24px; }
+    .quiz-header { padding-left: 24px; padding-right: 24px; }
+    .result-top { padding: 32px 24px; }
+    .cover-title { font-size: 30px; }
+    .q-text { font-size: 18px; }
+    .capture-box { padding: 24px; }
+    .cover-stats { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">CTS<span>.</span></div>
+    <div class="header-badge">Quiz gratuito</div>
+  </div>
+
+  <div class="card">
+
+    <!-- COVER -->
+    <div class="screen active" id="screen-cover">
+      <div class="cover-top">
+        <div class="cover-tag">Quiz da Liderança</div>
+        <div class="cover-title">Sua equipe trava<br>por causa de<br><em>você?</em></div>
+        <div class="cover-sub">Responda as perguntas e descubra exatamente o que está travando sua liderança — com um relatório personalizado e um plano de ação para aplicar esta semana.</div>
+      </div>
+      <div class="cover-bottom">
+        <div class="cover-stats">
+          <div class="stat">
+            <div class="stat-num">3 min</div>
+            <div class="stat-label">de duração</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">gratuito</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">+4 perfis</div>
+            <div class="stat-label">identificados</div>
+          </div>
+        </div>
+        <div style="background:#F0FDF8;border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start">
+          <div style="font-size:20px;flex-shrink:0">📋</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#085041;margin-bottom:2px">Você recebe ao final:</div>
+            <div style="font-size:12px;color:#0F6E56;line-height:1.6">Diagnóstico completo por pilar · Gaps prioritários da sua liderança · Plano de ação personalizado para os próximos 30 dias</div>
+          </div>
+        </div>
+        <div class="pilares-preview">
+          <div class="pilar-chip">Clareza</div>
+          <div class="pilar-chip">Estrutura</div>
+          <div class="pilar-chip">Execução</div>
+          <div class="pilar-chip">Desenvolvimento</div>
+          <div class="pilar-chip">Resultado</div>
+                </div>
+        <button class="btn-start" onclick="iniciar()">Quero descobrir agora →</button>
+        <div class="cover-note">Método AVANCE · CTS · Clésio Theodoro</div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="screen" id="screen-quiz">
+      <div class="quiz-header">
+        <div class="quiz-meta">
+          <div class="q-counter" id="q-counter">Pergunta 1 de 10</div>
+          <div class="q-pilar-tag" id="q-pilar-tag">Clareza</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width:10%"></div>
+        </div>
+      </div>
+      <div class="quiz-body">
+        <div class="q-text" id="q-text"></div>
+        <div class="options" id="options"></div>
+      </div>
+      <div class="quiz-footer">
+        <button class="btn-next" id="btn-next" onclick="avancar()">Próxima →</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="screen" id="screen-result">
+      <div class="result-top">
+        <div class="result-label">Seu resultado</div>
+        <div class="score-ring">
+          <div class="score-num" id="r-score">—</div>
+          <div class="score-lbl">de 100</div>
+        </div>
+        <div class="persona-tag" id="r-persona">—</div>
+        <div class="result-tagline" id="r-tagline">—</div>
+        <div class="result-desc" id="r-desc">—</div>
+      </div>
+      <div class="result-body">
+
+        <div id="form-area">
+          <div class="capture-box">
+            <div class="capture-title">Seu relatório está pronto</div>
+            <div class="capture-sub">Preencha abaixo para receber agora no seu e-mail o diagnóstico completo com seus gaps prioritários e o plano de ação personalizado para os próximos 30 dias.</div>
+            <div class="field">
+              <label>Nome</label>
+              <input type="text" id="f-nome" placeholder="Seu nome completo">
+            </div>
+            <div class="field">
+              <label>E-mail</label>
+              <input type="email" id="f-email" placeholder="seu@email.com">
+            </div>
+            <div class="field">
+              <label>WhatsApp <span style="opacity:.5;font-weight:400">(opcional)</span></label>
+              <input type="tel" id="f-phone" placeholder="(00) 00000-0000">
+            </div>
+            <button class="btn-capture" onclick="enviarLead()">Quero receber meu relatório e plano de ação →</button>
+            <div class="capture-privacy">Gratuito. Sem spam. Seu relatório chega em menos de 5 minutos.</div>
+          </div>
+        </div>
+
+        <div id="resultado-completo" style="display:none">
+          <div class="section-title">Score por pilar</div>
+          <div class="pilares-grid" id="pilares-grid"></div>
+
+          <div class="section-title">Gaps prioritários</div>
+          <div class="gaps-list" id="gaps-list"></div>
+
+          <div class="success-box">
+            <div class="success-icon">✓</div>
+            <div class="success-title">Relatório a caminho!</div>
+            <div class="success-sub">Em alguns minutos você recebe no e-mail seu diagnóstico completo com os gaps identificados e o plano de ação personalizado para os próximos 30 dias.<br><br>Enquanto isso, você já pode dar o primeiro passo — converse agora com o LiderIA, o consultor de liderança da CTS disponível 24h.</div>
+            <a class="btn-lideria" href="#" onclick="alert('Cole aqui o link do seu Project LiderIA no Claude')">Iniciar diagnóstico com o LiderIA →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    CTS Desenvolvimento e Gestão · Clésio Theodoro · Método AVANCE
+  </div>
+</div>
+
+<script>
+var PILARES = ["Clareza","Estrutura","Execução","Desenvolvimento","Resultado"];
+var PILARES_ICONS = ["◈","▣","◎","◇","◉"];
+
+var PERGUNTAS = [
+  { p:0, txt:"Quando você delega uma tarefa, o colaborador sabe exatamente o que é esperado — prazo, padrão e como será avaliado?", ops:["Sempre — alinho antes de qualquer tarefa","Na maioria das vezes","Às vezes, mas nem sempre","Raramente — só peço e espero o resultado"], peso:[100,68,38,10] },
+  { p:0, txt:"Sua equipe sabe, sem precisar perguntar, quais são as 3 prioridades da área esta semana?", ops:["Sim, está claro para todos","A maioria sabe","Alguns sabem, outros não","Não — cada um trabalha no que acha urgente"], peso:[100,65,35,10] },
+  { p:1, txt:"Existe um processo documentado para as tarefas mais repetidas da sua equipe?", ops:["Sim — temos padrão definido e seguido","Existe, mas nem sempre é seguido","Está na cabeça das pessoas, não documentado","Não existe. Cada um faz do seu jeito."], peso:[100,65,35,10] },
+  { p:1, txt:"Quando você fica ausente por 2 dias, a operação continua sem grandes problemas?", ops:["Sim — o time se vira bem","Funciona com alguns problemas menores","Funciona com dificuldade","Não — tudo para ou se perde"], peso:[100,65,35,10] },
+  { p:2, txt:"Com que frequência você acompanha o andamento das tarefas antes do prazo final?", ops:["Tenho rotina de acompanhamento regular","Acompanho na maioria das vezes","Só quando percebo que algo pode dar errado","Espero o prazo e vejo o resultado"], peso:[100,65,35,10] },
+  { p:2, txt:"Quando a equipe não entrega no prazo, o que normalmente acontece?", ops:["Analiso a causa e ajusto o processo","Converso com a pessoa e cobro a correção","Fico frustrado mas sigo em frente","Acabo resolvendo sozinho"], peso:[100,65,35,10] },
+  { p:3, txt:"Com que frequência você dá feedback estruturado — não só elogio ou crítica genérica?", ops:["Regularmente, com situação e impacto claros","Às vezes, quando algo relevante acontece","Raramente — só quando o problema é grave","Quase nunca. Não tenho método para isso."], peso:[100,65,35,10] },
+  { p:3, txt:"Você consegue identificar quem do time tem potencial para crescer e tem um plano ativo para isso?", ops:["Sim — sei quem é e já estou desenvolvendo","Sei quem é, mas não tenho plano ativo","Tenho uma ideia, mas nada concreto","Não — não penso nisso no dia a dia"], peso:[100,65,35,10] },
+  { p:4, txt:"Você acompanha indicadores de resultado da sua equipe com regularidade?", ops:["Sim — tenho métricas claras e reviso semanalmente","Tenho métricas, mas reviso esporadicamente","Tenho alguns números mas sem sistemática","Não meço — avalio no feeling"], peso:[100,65,35,10] },
+  { p:4, txt:"Sua equipe entregou o resultado esperado nos últimos 30 dias sem você precisar intervir o tempo todo?", ops:["Sim — funcionou de forma autônoma","Funcionou mas precisei intervir às vezes","Precisei intervir bastante","Não — fui eu quem garantiu quase tudo"], peso:[100,65,35,10] },
+];
+
+var PERSONAS = [
+  { nome:"Reativo", range:[0,35], tagline:"Sua liderança está no improviso", desc:"Você age sempre na urgência, sem método e sem rotina. O ponto de partida é estabelecer clareza mínima de papéis e criar uma rotina básica de acompanhamento." },
+  { nome:"Controlador", range:[36,55], tagline:"Você centraliza — e isso te trava", desc:"Você sabe fazer, mas tem dificuldade de estruturar para que outros façam. O foco agora é processo e delegação com clareza." },
+  { nome:"Estruturador", range:[56,75], tagline:"Você está saindo do operacional", desc:"Tem clareza e começa a criar processos. O próximo nível é consistência na execução e desenvolvimento ativo do time." },
+  { nome:"Estratégico", range:[76,100], tagline:"Sua liderança está madura", desc:"O time tem autonomia e o resultado aparece com consistência. O foco agora é escalar e desenvolver sucessores." },
+];
+
+var GAP_MSGS = [
+  { titulo:"Clareza insuficiente na delegação", sub:"A equipe executa sem saber exatamente o que é esperado — o que gera retrabalho e dependência." },
+  { titulo:"Falta de processos documentados", sub:"A operação depende da memória das pessoas, não de padrões definidos." },
+  { titulo:"Acompanhamento intermediário fraco", sub:"Você cobra no prazo final, não no meio do caminho — quando ainda dá para corrigir." },
+  { titulo:"Desenvolvimento de pessoas em segundo plano", sub:"Falta feedback estruturado e um plano real para crescimento do time." },
+  { titulo:"Resultado sem métrica definida", sub:"Sem número, a avaliação fica no feeling. Sem número, não há evolução objetiva." },
+];
+
+var atual = 0;
+var respostas = [];
+var pilPontos = [0,0,0,0,0];
+var pilCont = [0,0,0,0,0];
+
+function getColor(v) {
+  if (v >= 70) return "#1D9E75";
+  if (v >= 45) return "#EF9F27";
+  return "#E24B4A";
+}
+
+function iniciar() {
+  show("screen-quiz");
+  renderQ();
+}
+
+function show(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function renderQ() {
+  var q = PERGUNTAS[atual];
+  var pct = Math.round(((atual+1)/PERGUNTAS.length)*100);
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("q-counter").textContent = "Pergunta " + (atual+1);
+  document.getElementById("q-pilar-tag").textContent = PILARES[q.p];
+  document.getElementById("q-text").textContent = q.txt;
+  var html = "";
+  q.ops.forEach(function(op, i) {
+    var sel = respostas[atual] === i ? " selected" : "";
+    html += '<button class="opt' + sel + '" onclick="selecionar(' + i + ')">' + op + '</button>';
+  });
+  document.getElementById("options").innerHTML = html;
+  var bn = document.getElementById("btn-next");
+  if (respostas[atual] !== undefined) {
+    bn.classList.add("visible");
+    bn.textContent = atual < PERGUNTAS.length - 1 ? "Próxima →" : "Ver meu resultado →";
+  } else {
+    bn.classList.remove("visible");
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function selecionar(i) {
+  respostas[atual] = i;
+  document.querySelectorAll(".opt").forEach(function(el, idx) {
+    el.classList.toggle("selected", idx === i);
+  });
+  var bn = document.getElementById("btn-next");
+  bn.classList.add("visible");
+  bn.textContent = atual < PERGUNTAS.length - 1 ? "Próxima →" : "Ver meu resultado →";
+}
+
+function avancar() {
+  if (respostas[atual] === undefined) return;
+  var q = PERGUNTAS[atual];
+  pilPontos[q.p] += q.peso[respostas[atual]];
+  pilCont[q.p]++;
+  if (atual < PERGUNTAS.length - 1) {
+    atual++;
+    renderQ();
+  } else {
+    mostrarResultado();
+  }
+}
+
+function mostrarResultado() {
+  show("screen-result");
+  var scores = PILARES.map(function(_, i) {
+    return pilCont[i] > 0 ? Math.round(pilPontos[i] / pilCont[i]) : 0;
+  });
+  var geral = Math.round(scores.reduce(function(a,b){return a+b;},0) / scores.length);
+  document.getElementById("r-score").textContent = geral;
+  var persona = PERSONAS.find(function(p) { return geral >= p.range[0] && geral <= p.range[1]; }) || PERSONAS[0];
+  document.getElementById("r-persona").textContent = persona.nome;
+  document.getElementById("r-tagline").textContent = persona.tagline;
+  document.getElementById("r-desc").textContent = persona.desc;
+
+  var pilHtml = "";
+  scores.forEach(function(s, i) {
+    pilHtml += '<div class="pilar-row">' +
+      '<div class="pilar-name">' + PILARES[i] + '</div>' +
+      '<div class="pilar-track"><div class="pilar-fill" style="width:' + s + '%;background:' + getColor(s) + '"></div></div>' +
+      '<div class="pilar-score" style="color:' + getColor(s) + '">' + s + '</div>' +
+      '</div>';
+  });
+  document.getElementById("pilares-grid").innerHTML = pilHtml;
+
+  var sorted = scores.map(function(s,i){return{s:s,i:i};}).sort(function(a,b){return a.s-b.s;});
+  var gaps = sorted.filter(function(g){return g.s < 70;}).slice(0,3);
+  if (gaps.length === 0) gaps = sorted.slice(0,2);
+  var gapHtml = "";
+  gaps.forEach(function(g) {
+    gapHtml += '<div class="gap-item">' +
+      '<div class="gap-icon">' + PILARES_ICONS[g.i] + '</div>' +
+      '<div class="gap-text">' +
+        '<div class="gap-title">' + GAP_MSGS[g.i].titulo + '</div>' +
+        '<div class="gap-sub">' + GAP_MSGS[g.i].sub + '</div>' +
+      '</div></div>';
+  });
+  document.getElementById("gaps-list").innerHTML = gapHtml;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  window._quizScore = geral;
+  window._quizPersona = persona.nome;
+  window._quizScores = scores;
+  window._quizGaps = sorted.filter(function(g){return g.s < 70;}).slice(0,3);
+  if (window._quizGaps.length === 0) window._quizGaps = sorted.slice(0,2);
+}
+
+function enviarLead() {
+  var nome = document.getElementById("f-nome").value.trim();
+  var email = document.getElementById("f-email").value.trim();
+  if (!nome || !email) {
+    alert("Preencha nome e e-mail para receber o relatório.");
+    return;
+  }
+  var score = window._quizScore || 0;
+  var persona = window._quizPersona || "";
+
+  // Integração Tally ativa — Form ID: pbzLYZ
+  var tallyData = new FormData();
+  tallyData.append('fields[nome]', nome);
+  tallyData.append('fields[email]', email);
+  tallyData.append('fields[whatsapp]', document.getElementById('f-phone').value.trim());
+  tallyData.append('fields[score]', score);
+  tallyData.append('fields[persona]', persona);
+
+  fetch('https://tally.so/r/pbzLYZ', {
+    method: 'POST',
+    body: tallyData
+  }).catch(function() {
+    // fallback silencioso — lead salvo localmente
+    console.log('Lead capturado:', nome, email, score, persona);
+  });
+
+  document.getElementById("form-area").style.display = "none";
+  document.getElementById("resultado-completo").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Renderizar pilares e gaps (já calculados)
+  renderResultadoCompleto();
+}
+
+function renderResultadoCompleto() {
+  var scores = window._quizScores || [];
+  var gaps = window._quizGaps || [];
+
+  var pilHtml = "";
+  scores.forEach(function(s, i) {
+    pilHtml += '<div class="pilar-row">' +
+      '<div class="pilar-name">' + PILARES[i] + '</div>' +
+      '<div class="pilar-track"><div class="pilar-fill" style="width:' + s + '%;background:' + getColor(s) + '"></div></div>' +
+      '<div class="pilar-score" style="color:' + getColor(s) + '">' + s + '</div>' +
+      '</div>';
+  });
+  document.getElementById("pilares-grid").innerHTML = pilHtml;
+
+  var gapHtml = "";
+  gaps.forEach(function(g) {
+    gapHtml += '<div class="gap-item">' +
+      '<div class="gap-icon">' + PILARES_ICONS[g.i] + '</div>' +
+      '<div class="gap-text">' +
+        '<div class="gap-title">' + GAP_MSGS[g.i].titulo + '</div>' +
+        '<div class="gap-sub">' + GAP_MSGS[g.i].sub + '</div>' +
+      '</div></div>';
+  });
+  document.getElementById("gaps-list").innerHTML = gapHtml;
+}
+</script>
+
+</body>
+</html>
