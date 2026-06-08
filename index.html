@@ -623,7 +623,6 @@
     .score-num { font-size: 32px; }
   }
 </style>
-<script async src="https://tally.so/widgets/embed.js"></script>
 </head>
 <body>
 
@@ -711,36 +710,33 @@
       <div class="result-body">
 
         <div id="form-area">
-          <div style="background:var(--navy);border-radius:20px;padding:28px 32px;margin-bottom:0">
+          <div style="background:var(--navy);border-radius:20px;padding:28px 32px">
             <div style="display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#C9A84C;background:rgba(201,168,76,0.15);padding:4px 12px;border-radius:4px;margin-bottom:14px">Quase lá</div>
             <div style="font-family:'DM Serif Display',serif;font-size:22px;color:#ffffff;margin-bottom:8px;line-height:1.3">Seu diagnóstico está pronto</div>
             <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:20px">Preencha seus dados para liberar o resultado completo — com plano de ação personalizado e os gaps prioritários da sua liderança.</div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px">
               <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Score por pilar</div>
               <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Gaps prioritários</div>
               <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Plano de ação 30 dias</div>
               <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Seu perfil de liderança</div>
             </div>
-            <style>
-              /* Forçar cor branca nos labels visíveis acima do iframe */
-              #tally-wrapper { position: relative; }
-            </style>
-            <iframe
-              id="tally-iframe"
-              src="https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&customCSS=eyJsYWJlbCI6eyJjb2xvciI6IiNmZmZmZmYifX0="
-              loading="lazy"
-              width="100%"
-              height="300"
-              frameborder="0"
-              marginheight="0"
-              marginwidth="0"
-              title="Captura de lead"
-              style="background:transparent;border:none;display:block;filter:invert(0)"
-            ></iframe>
-            <div style="font-size:11px;color:rgba(255,255,255,0.3);text-align:center;margin-top:8px">Gratuito. Sem spam.</div>
-            <div id="btn-fallback-wrap" style="display:none;margin-top:12px">
-              <button onclick="mostrarResultadoCompleto()" style="display:block;width:100%;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;background:#1D9E75;color:#fff;border:none;border-radius:12px;cursor:pointer">Já preenchi — ver meu resultado →</button>
+            <div style="margin-bottom:14px">
+              <label style="display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.8);margin-bottom:6px">Nome <span style="color:#E24B4A">*</span></label>
+              <input id="f-nome" type="text" placeholder="Seu nome completo" style="width:100%;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;color:#ffffff;outline:none;box-sizing:border-box">
+              <div id="err-nome" style="display:none;font-size:11px;color:#ff6b6b;margin-top:4px">⚠ Preencha seu nome</div>
             </div>
+            <div style="margin-bottom:14px">
+              <label style="display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.8);margin-bottom:6px">E-mail <span style="color:#E24B4A">*</span></label>
+              <input id="f-email" type="email" placeholder="seu@email.com" style="width:100%;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;color:#ffffff;outline:none;box-sizing:border-box">
+              <div id="err-email" style="display:none;font-size:11px;color:#ff6b6b;margin-top:4px">⚠ Preencha um e-mail válido</div>
+            </div>
+            <div style="margin-bottom:24px">
+              <label style="display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.8);margin-bottom:6px">WhatsApp <span style="color:#E24B4A">*</span></label>
+              <input id="f-phone" type="tel" placeholder="(00) 00000-0000" style="width:100%;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;color:#ffffff;outline:none;box-sizing:border-box">
+              <div id="err-phone" style="display:none;font-size:11px;color:#ff6b6b;margin-top:4px">⚠ Preencha seu WhatsApp</div>
+            </div>
+            <button onclick="enviarFormulario()" style="display:block;width:100%;padding:15px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;background:#1D9E75;color:#ffffff;border:none;border-radius:12px;cursor:pointer">Liberar meu resultado →</button>
+            <div style="font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:10px">Gratuito · Sem spam · Resultado imediato</div>
           </div>
         </div>
 
@@ -890,15 +886,7 @@ function avancar() {
 
 function mostrarResultado() {
   show("screen-result");
-  setTimeout(function() {
-    iniciarPolling();
-    setTimeout(function() {
-      if (!resultadoMostrado) {
-        var wrap = document.getElementById("btn-fallback-wrap");
-        if (wrap) wrap.style.display = "block";
-      }
-    }, 6000);
-  }, 2000);
+
 
   var scores = PILARES.map(function(_, i) {
     return pilCont[i] > 0 ? Math.round(pilPontos[i] / pilCont[i]) : 0;
@@ -940,19 +928,12 @@ function mostrarResultado() {
   window._quizGaps = sorted.filter(function(g){return g.s < 70;}).slice(0,3);
   if (window._quizGaps.length === 0) window._quizGaps = sorted.slice(0,2);
 
-  // Atualiza iframe com score e persona como parâmetros ocultos
-  var iframe = document.getElementById("tally-iframe");
-  if (iframe) {
-    iframe.src = "https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&Score=" + geral + "&Persona=" + encodeURIComponent(persona.nome);
-  }
+
 }
 
 function enviarLead() {
-  // Não usado mais — Tally iframe cuida do envio
-  // Mantido para compatibilidade
 }
 
-// Detectar submit do Tally — múltiplas estratégias
 var resultadoMostrado = false;
 
 function mostrarResultadoCompleto() {
@@ -964,65 +945,65 @@ function mostrarResultadoCompleto() {
   renderResultadoCompleto();
 }
 
-// Estratégia 1 — evento postMessage do Tally
-window.addEventListener("message", function(e) {
-  if (!e.data) return;
-  var d = e.data;
-  if (
-    d.type === "tally-form-submitted" ||
-    d.type === "tally:formSubmitted" ||
-    (d.formId && d.formId === "pbzLYZ") ||
-    (typeof d === "string" && d.indexOf("submitted") > -1)
-  ) {
-    setTimeout(mostrarResultadoCompleto, 800);
+function enviarFormulario() {
+  var nome = document.getElementById("f-nome").value.trim();
+  var email = document.getElementById("f-email").value.trim();
+  var phone = document.getElementById("f-phone").value.trim();
+
+  var ok = true;
+
+  // Validar nome
+  if (!nome) {
+    document.getElementById("err-nome").style.display = "block";
+    document.getElementById("f-nome").style.borderColor = "#E24B4A";
+    ok = false;
+  } else {
+    document.getElementById("err-nome").style.display = "none";
+    document.getElementById("f-nome").style.borderColor = "#1D9E75";
   }
-});
 
-// Estratégia 2 — polling: checar altura do iframe
-// Quando Tally mostra "Thanks", o iframe muda de tamanho
-var alturaAnterior = 0;
-var pollingCount = 0;
-var pollingAtivo = false;
+  // Validar email
+  var emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!email || !emailValido) {
+    document.getElementById("err-email").style.display = "block";
+    document.getElementById("f-email").style.borderColor = "#E24B4A";
+    ok = false;
+  } else {
+    document.getElementById("err-email").style.display = "none";
+    document.getElementById("f-email").style.borderColor = "#1D9E75";
+  }
 
-function iniciarPolling() {
-  if (pollingAtivo) return;
-  pollingAtivo = true;
-  var intervalo = setInterval(function() {
-    pollingCount++;
-    if (pollingCount > 120) { clearInterval(intervalo); return; } // para após 60s
-    var iframe = document.getElementById("tally-iframe");
-    if (!iframe) return;
-    var alturaAtual = iframe.offsetHeight;
-    // Se o iframe encolheu (Tally mostra tela de thanks menor)
-    if (alturaAnterior > 0 && alturaAtual < alturaAnterior - 50) {
-      clearInterval(intervalo);
-      setTimeout(mostrarResultadoCompleto, 600);
-      return;
-    }
-    if (alturaAtual > 0) alturaAnterior = alturaAtual;
-  }, 500);
+  // Validar WhatsApp
+  if (!phone || phone.replace(/\D/g,'').length < 10) {
+    document.getElementById("err-phone").style.display = "block";
+    document.getElementById("f-phone").style.borderColor = "#E24B4A";
+    ok = false;
+  } else {
+    document.getElementById("err-phone").style.display = "none";
+    document.getElementById("f-phone").style.borderColor = "#1D9E75";
+  }
+
+  if (!ok) return;
+
+  // Enviar para Tally via fetch
+  var score = window._quizScore || 0;
+  var persona = window._quizPersona || "";
+
+  fetch("https://tally.so/r/pbzLYZ", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "nome=" + encodeURIComponent(nome) +
+          "&email=" + encodeURIComponent(email) +
+          "&whatsapp=" + encodeURIComponent(phone) +
+          "&score=" + encodeURIComponent(score) +
+          "&persona=" + encodeURIComponent(persona)
+  }).catch(function(){});
+
+  // Mostrar resultado independente do fetch
+  mostrarResultadoCompleto();
 }
 
-// Estratégia 3 — botão manual fixo no HTML (não dinâmico)
-function criarBotaoFallback() {
-  // Não cria botão dinamicamente — já existe no HTML
-}
 
-// Iniciar quando chegar na tela de resultado
-document.addEventListener("DOMContentLoaded", function() {
-  setTimeout(function() {
-    if (document.getElementById("tally-iframe")) {
-      iniciarPolling();
-      // Mostrar botão fixo após 6 segundos
-      setTimeout(function() {
-        if (!resultadoMostrado) {
-          var wrap = document.getElementById("btn-fallback-wrap");
-          if (wrap) wrap.style.display = "block";
-        }
-      }, 6000);
-    }
-  }, 3000);
-});
 
 var PLANOS_ACAO = {
   0: [ // Reativo
