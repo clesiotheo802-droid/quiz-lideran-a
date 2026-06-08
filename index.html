@@ -756,3 +756,153 @@ var GAP_MSGS = [
   { titulo:"Acompanhamento intermediário fraco", sub:"Você cobra no prazo final, não no meio do caminho — quando ainda dá para corrigir." },
   { titulo:"Desenvolvimento de pessoas em segundo plano", sub:"Falta feedback estruturado e um plano real para crescimento do time." },
   { titulo:"Resultado sem métrica definida", sub:"
+Sem número, a avaliação fica no feeling. Sem número, não há evolução objetiva." },
+];
+
+var atual = 0;
+var respostas = [];
+var pilPontos = [0,0,0,0,0];
+var pilCont = [0,0,0,0,0];
+
+function getColor(v) {
+  if (v >= 70) return "#1D9E75";
+  if (v >= 45) return "#EF9F27";
+  return "#E24B4A";
+}
+
+function iniciar() {
+  show("screen-quiz");
+  renderQ();
+}
+
+function show(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function renderQ() {
+  var q = PERGUNTAS[atual];
+  var pct = Math.round(((atual+1)/PERGUNTAS.length)*100);
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("q-counter").textContent = "Pergunta " + (atual+1);
+  document.getElementById("q-pilar-tag").textContent = PILARES[q.p];
+  document.getElementById("q-text").textContent = q.txt;
+  var html = "";
+  q.ops.forEach(function(op, i) {
+    var sel = respostas[atual] === i ? " selected" : "";
+    html += '<button class="opt' + sel + '" onclick="selecionar(' + i + ')">' + op + '</button>';
+  });
+  document.getElementById("options").innerHTML = html;
+  var bn = document.getElementById("btn-next");
+  if (respostas[atual] !== undefined) {
+    bn.classList.add("visible");
+    bn.textContent = atual < PERGUNTAS.length - 1 ? "Próxima →" : "Ver meu resultado →";
+  } else {
+    bn.classList.remove("visible");
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function selecionar(i) {
+  respostas[atual] = i;
+  document.querySelectorAll(".opt").forEach(function(el, idx) {
+    el.classList.toggle("selected", idx === i);
+  });
+  var bn = document.getElementById("btn-next");
+  bn.classList.add("visible");
+  bn.textContent = atual < PERGUNTAS.length - 1 ? "Próxima →" : "Ver meu resultado →";
+}
+
+function avancar() {
+  if (respostas[atual] === undefined) return;
+  var q = PERGUNTAS[atual];
+  pilPontos[q.p] += q.peso[respostas[atual]];
+  pilCont[q.p]++;
+  if (atual < PERGUNTAS.length - 1) {
+    atual++;
+    renderQ();
+  } else {
+    mostrarResultado();
+  }
+}
+
+function mostrarResultado() {
+  show("screen-result");
+  var scores = PILARES.map(function(_, i) {
+    return pilCont[i] > 0 ? Math.round(pilPontos[i] / pilCont[i]) : 0;
+  });
+  var geral = Math.round(scores.reduce(function(a,b){return a+b;},0) / scores.length);
+  document.getElementById("r-score").textContent = geral;
+  var persona = PERSONAS.find(function(p) { return geral >= p.range[0] && geral <= p.range[1]; }) || PERSONAS[0];
+  document.getElementById("r-persona").textContent = persona.nome;
+  document.getElementById("r-tagline").textContent = persona.tagline;
+  document.getElementById("r-desc").textContent = persona.desc;
+  window._quizScore = geral;
+  window._quizPersona = persona;
+  window._quizScores = scores;
+  window._quizGaps = scores.map(function(s,i){return{s:s,i:i};}).sort(function(a,b){return a.s-b.s;}).filter(function(g){return g.s < 70;}).slice(0,3);
+  if (window._quizGaps.length === 0) window._quizGaps = scores.map(function(s,i){return{s:s,i:i};}).sort(function(a,b){return a.s-b.s;}).slice(0,2);
+  var iframe = document.getElementById("tally-iframe");
+  if (iframe) {
+    iframe.src = "https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&Score=" + geral + "&Persona=" + encodeURIComponent(persona.nome);
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+window.addEventListener("message", function(e) {
+  if (e.data && e.data.type === "tally-form-submitted") {
+    document.getElementById("form-area").style.display = "none";
+    document.getElementById("resultado-completo").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    renderResultadoCompleto();
+  }
+});
+
+function renderResultadoCompleto() {
+  var scores = window._quizScores || [];
+  var gaps = window._quizGaps || [];
+  var persona = window._quizPersona || PERSONAS[0];
+
+  var pilHtml = "";
+  scores.forEach(function(s, i) {
+    pilHtml += '<div class="pilar-row">' +
+      '<div class="pilar-name">' + PILARES[i] + '</div>' +
+      '<div class="pilar-track"><div class="pilar-fill" style="width:' + s + '%;background:' + getColor(s) + '"></div></div>' +
+      '<div class="pilar-score" style="color:' + getColor(s) + '">' + s + '</div>' +
+      '</div>';
+  });
+  document.getElementById("pilares-grid").innerHTML = pilHtml;
+
+  var gapHtml = "";
+  gaps.forEach(function(g) {
+    gapHtml += '<div class="gap-item">' +
+      '<div class="gap-icon">' + PILARES_ICONS[g.i] + '</div>' +
+      '<div class="gap-text">' +
+        '<div class="gap-title">' + GAP_MSGS[g.i].titulo + '</div>' +
+        '<div class="gap-sub">' + GAP_MSGS[g.i].sub + '</div>' +
+      '</div></div>';
+  });
+  document.getElementById("gaps-list").innerHTML = gapHtml;
+
+  var perfilHtml =
+    '<div style="margin-bottom:16px">' +
+      '<div class="perfil-bloco-titulo">✦ Quem você é como líder</div>' +
+      '<p style="font-size:13px;color:var(--text);line-height:1.6">' + persona.desc + '</p>' +
+    '</div>' +
+    '<div style="margin-bottom:16px">' +
+      '<div class="perfil-bloco-titulo">💪 Seus pontos fortes</div>' +
+      persona.forcas.map(function(f){ return '<div class="perfil-bloco-item"><span>✓</span><span>' + f + '</span></div>'; }).join('') +
+    '</div>' +
+    '<div style="margin-bottom:16px">' +
+      '<div class="perfil-bloco-titulo">⚠ Seus gaps prioritários</div>' +
+      persona.gaps.map(function(g){ return '<div class="perfil-bloco-item"><span>→</span><span>' + g + '</span></div>'; }).join('') +
+    '</div>' +
+    '<div>' +
+      '<div class="perfil-bloco-titulo">🎯 Seu próximo nível</div>' +
+      '<p style="font-size:13px;color:var(--text);line-height:1.6">' + persona.proximo + '</p>' +
+    '</div>';
+  document.getElementById("perfil-detalhe").innerHTML = perfilHtml;
+}
+</script>
+</body>
+</html>
