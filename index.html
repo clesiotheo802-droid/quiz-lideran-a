@@ -23,7 +23,9 @@
     --text-muted: #666666;
     --border: rgba(0,0,0,0.08);
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--off-white);
@@ -31,6 +33,8 @@
     color: var(--text);
     overflow-x: hidden;
   }
+
+  /* Background pattern */
   body::before {
     content: '';
     position: fixed;
@@ -41,6 +45,7 @@
     pointer-events: none;
     z-index: 0;
   }
+
   .container {
     position: relative;
     z-index: 1;
@@ -48,6 +53,8 @@
     margin: 0 auto;
     padding: 0 20px 60px;
   }
+
+  /* Header */
   .header {
     display: flex;
     align-items: center;
@@ -71,6 +78,8 @@
     border-radius: 20px;
     letter-spacing: 0.04em;
   }
+
+  /* Card */
   .card {
     background: var(--white);
     border-radius: 20px;
@@ -78,8 +87,12 @@
     overflow: hidden;
     transition: box-shadow .3s;
   }
+
+  /* Screen management */
   .screen { display: none; }
   .screen.active { display: block; }
+
+  /* === COVER === */
   .cover-top {
     background: var(--navy);
     padding: 48px 40px 40px;
@@ -125,7 +138,10 @@
     position: relative;
     z-index: 1;
   }
-  .cover-title em { font-style: italic; color: var(--gold); }
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
   .cover-sub {
     font-size: 15px;
     line-height: 1.65;
@@ -142,6 +158,7 @@
     padding-bottom: 28px;
     border-bottom: 1px solid var(--border);
   }
+  .stat { }
   .stat-num {
     font-family: 'DM Serif Display', serif;
     font-size: 28px;
@@ -183,9 +200,12 @@
   .btn-start:hover { background: var(--navy-dark); transform: translateY(-1px); }
   .btn-start:active { transform: translateY(0); }
   .cover-note { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+
+  /* === QUIZ === */
   .quiz-header {
-    padding: 28px 40px 20px;
+    padding: 28px 40px 0;
     border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
   }
   .quiz-meta {
     display: flex;
@@ -193,7 +213,11 @@
     align-items: center;
     margin-bottom: 14px;
   }
-  .q-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+  .q-counter {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
   .q-pilar-tag {
     font-size: 11px;
     font-weight: 600;
@@ -230,7 +254,7 @@
     display: block;
     width: 100%;
     text-align: left;
-    padding: 14px 18px 14px 46px;
+    padding: 14px 18px;
     border: 1.5px solid var(--border);
     border-radius: 12px;
     background: var(--white);
@@ -251,7 +275,9 @@
     border-radius: 50%;
     border: 1.5px solid var(--light);
     transition: all .18s;
+    flex-shrink: 0;
   }
+  .opt { padding-left: 46px; }
   .opt:hover { border-color: var(--teal); background: var(--teal-light); }
   .opt.selected {
     border-color: var(--teal);
@@ -285,6 +311,8 @@
   }
   .btn-next.visible { opacity: 1; pointer-events: auto; }
   .btn-next:hover { background: var(--navy-dark); transform: translateY(-1px); }
+
+  /* === RESULT === */
   .result-top {
     background: var(--navy);
     padding: 40px;
@@ -320,6 +348,16 @@
     margin: 0 auto 16px;
     position: relative; z-index: 1;
     background: rgba(255,255,255,0.05);
+  }
+  .score-ring-fill {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+    border-top-color: var(--teal);
+    border-right-color: var(--teal);
+    transform: rotate(-45deg);
+    transition: transform 1s;
   }
   .score-num {
     font-family: 'DM Serif Display', serif;
@@ -384,8 +422,17 @@
     border-radius: 3px;
     overflow: hidden;
   }
-  .pilar-fill { height: 6px; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
-  .pilar-score { font-size: 13px; font-weight: 600; min-width: 28px; text-align: right; }
+  .pilar-fill {
+    height: 6px;
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(.4,0,.2,1);
+  }
+  .pilar-score {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 28px;
+    text-align: right;
+  }
   .gaps-list { margin-bottom: 28px; }
   .gap-item {
     display: flex;
@@ -411,20 +458,23 @@
     background: var(--navy);
     border-radius: 16px;
     padding: 28px 32px;
+    margin-bottom: 0;
   }
   .capture-title {
     font-family: 'DM Serif Display', serif;
-    font-size: 24px;
+    font-size: 22px;
     color: var(--white);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .capture-sub {
     font-size: 13px;
     color: rgba(255,255,255,0.6);
     line-height: 1.6;
-    margin-bottom: 0;
+    margin-bottom: 24px;
   }
-  .field { margin-bottom: 12px; }
+  .field {
+    margin-bottom: 12px;
+  }
   .field label {
     display: block;
     font-size: 12px;
@@ -464,31 +514,12 @@
     letter-spacing: 0.01em;
   }
   .btn-capture:hover { background: #188a63; transform: translateY(-1px); }
-
-  /* Perfil detalhado */
-  .perfil-detalhe {
-    background: var(--off-white);
-    border-radius: 16px;
-    padding: 24px 28px;
-    margin-bottom: 20px;
-  }
-  .perfil-bloco-titulo {
+  .capture-privacy {
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 10px;
+    color: rgba(255,255,255,0.35);
+    text-align: center;
+    margin-top: 10px;
   }
-  .perfil-bloco-item {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 8px;
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.5;
-  }
-  .perfil-bloco-item span { flex-shrink: 0; }
 
   /* Success */
   .success-box {
@@ -505,11 +536,11 @@
     margin-bottom: 6px;
   }
   .success-sub { font-size: 13px; color: var(--teal-mid); line-height: 1.6; margin-bottom: 20px; }
-  .btn-comunidade {
+  .btn-lideria {
     display: inline-block;
-    padding: 14px 28px;
+    padding: 12px 24px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     background: var(--navy);
     color: var(--white);
@@ -518,16 +549,10 @@
     cursor: pointer;
     transition: background .2s;
     text-decoration: none;
-    letter-spacing: 0.01em;
   }
-  .btn-comunidade:hover { background: var(--navy-dark); }
-  .btn-comunidade-note {
-    font-size: 11px;
-    color: var(--teal-mid);
-    margin-top: 10px;
-    opacity: 0.7;
-  }
+  .btn-lideria:hover { background: var(--navy-dark); }
 
+  /* Footer */
   .footer {
     text-align: center;
     padding: 24px 0 0;
@@ -535,20 +560,73 @@
     color: var(--text-muted);
   }
 
+  /* Plano de ação */
+  .acao-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .acao-item:last-child { border-bottom: none; }
+  .acao-num {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .acao-body { flex: 1; }
+  .acao-titulo { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .acao-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 4px; }
+  .acao-quando { font-size: 11px; font-weight: 600; color: var(--teal-mid); background: var(--teal-light); padding: 2px 8px; border-radius: 4px; display: inline-block; }
+
+  /* Perfil detalhe */
+  .perfil-box {
+    background: var(--off-white);
+    border-radius: 16px;
+    padding: 20px 24px;
+    border-left: 4px solid var(--navy);
+  }
+  .perfil-nome { font-family: "DM Serif Display", serif; font-size: 22px; color: var(--navy); margin-bottom: 6px; }
+  .perfil-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 14px; }
+  .perfil-evolucao { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  .perfil-proximo { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* Responsive */
   @media (max-width: 480px) {
-    .cover-top, .cover-bottom, .quiz-body, .result-body, .quiz-footer { padding-left: 24px; padding-right: 24px; }
-    .quiz-header { padding-left: 24px; padding-right: 24px; }
-    .result-top { padding: 32px 24px; }
-    .cover-title { font-size: 30px; }
-    .q-text { font-size: 18px; }
-    .capture-box { padding: 24px; }
-    .cover-stats { gap: 20px; }
-    .perfil-detalhe { padding: 20px; }
+    .container { padding: 0 12px 40px; }
+    .cover-top, .cover-bottom, .quiz-body, .result-body, .quiz-footer { padding-left: 20px; padding-right: 20px; }
+    .quiz-header { padding-left: 20px; padding-right: 20px; }
+    .result-top { padding: 28px 20px; }
+    .cover-title { font-size: 28px; }
+    .q-text { font-size: 17px; }
+    .capture-box { padding: 20px; }
+    .cover-stats { gap: 16px; }
+    .score-ring { width: 110px; height: 110px; }
+    .score-num { font-size: 38px; }
+    .result-tagline { font-size: 19px; }
+    .pilar-name { min-width: 90px; font-size: 12px; }
+    .acao-item { gap: 10px; }
+    .card { border-radius: 16px; }
+    .header { padding: 16px 0 0; margin-bottom: 20px; }
+    .section-title { font-size: 10px; }
+    .pilares-preview { gap: 6px; }
+    .pilar-chip { font-size: 11px; padding: 4px 10px; }
+    .cover-stats .stat-num { font-size: 22px; }
+  }
+  @media (max-width: 360px) {
+    .cover-title { font-size: 24px; }
+    .q-text { font-size: 15px; }
+    .score-num { font-size: 32px; }
   }
 </style>
 <script async src="https://tally.so/widgets/embed.js"></script>
 </head>
 <body>
+
 <div class="container">
   <div class="header">
     <div class="logo">CTS<span>.</span></div>
@@ -575,7 +653,7 @@
             <div class="stat-label">gratuito</div>
           </div>
           <div class="stat">
-            <div class="stat-num">4 perfis</div>
+            <div class="stat-num">+4 perfis</div>
             <div class="stat-label">identificados</div>
           </div>
         </div>
@@ -592,7 +670,7 @@
           <div class="pilar-chip">Execução</div>
           <div class="pilar-chip">Desenvolvimento</div>
           <div class="pilar-chip">Resultado</div>
-        </div>
+                </div>
         <button class="btn-start" onclick="iniciar()">Quero descobrir agora →</button>
         <div class="cover-note">Método AVANCE · CTS · Clésio Theodoro</div>
       </div>
@@ -630,35 +708,42 @@
         <div class="result-tagline" id="r-tagline">—</div>
         <div class="result-desc" id="r-desc">—</div>
       </div>
-
       <div class="result-body">
+
         <div id="form-area">
-
-          <!-- CAPTURE BOX + FORMULÁRIO NA MESMA TELA -->
-          <div class="capture-box">
-            <div class="capture-title">Seu relatório está pronto!</div>
-            <div class="capture-sub">Preencha os dados abaixo e receba agora no seu e-mail o diagnóstico completo com seus gaps prioritários e o plano de ação personalizado para os próximos 30 dias.</div>
-          </div>
-
-          <div style="margin-top:0;border-radius:0 0 16px 16px;overflow:hidden;background:var(--navy);padding:0 32px 28px;">
+          <div style="background:var(--navy);border-radius:20px;padding:28px 32px;margin-bottom:0">
+            <div style="display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#C9A84C;background:rgba(201,168,76,0.15);padding:4px 12px;border-radius:4px;margin-bottom:14px">Quase lá</div>
+            <div style="font-family:'DM Serif Display',serif;font-size:22px;color:#ffffff;margin-bottom:8px;line-height:1.3">Seu diagnóstico está pronto</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:20px">Preencha seus dados para liberar o resultado completo — com plano de ação personalizado e os gaps prioritários da sua liderança.</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Score por pilar</div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Gaps prioritários</div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Plano de ação 30 dias</div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Seu perfil de liderança</div>
+            </div>
+            <style>
+              /* Forçar cor branca nos labels visíveis acima do iframe */
+              #tally-wrapper { position: relative; }
+            </style>
             <iframe
               id="tally-iframe"
-              src="https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+              src="https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&customCSS=eyJsYWJlbCI6eyJjb2xvciI6IiNmZmZmZmYifX0="
               loading="lazy"
               width="100%"
-              height="320"
+              height="300"
               frameborder="0"
               marginheight="0"
               marginwidth="0"
-              title="Quiz da Liderança — Captura de Lead"
-              style="background:transparent;border:none"
+              title="Captura de lead"
+              style="background:transparent;border:none;display:block;filter:invert(0)"
             ></iframe>
-            <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.35);margin-top:4px">Gratuito. Sem spam. Seu relatório chega em menos de 5 minutos.</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);text-align:center;margin-top:8px">Gratuito. Sem spam.</div>
+            <div id="btn-fallback-wrap" style="display:none;margin-top:12px">
+              <button onclick="mostrarResultadoCompleto()" style="display:block;width:100%;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;background:#1D9E75;color:#fff;border:none;border-radius:12px;cursor:pointer">Já preenchi — ver meu resultado →</button>
+            </div>
           </div>
-
         </div>
 
-        <!-- RESULTADO COMPLETO (após envio) -->
         <div id="resultado-completo" style="display:none">
 
           <div class="section-title">Score por pilar</div>
@@ -667,23 +752,33 @@
           <div class="section-title">Gaps prioritários</div>
           <div class="gaps-list" id="gaps-list"></div>
 
-          <div class="section-title" style="margin-top:28px">Seu perfil de liderança</div>
-          <div class="perfil-detalhe" id="perfil-detalhe"></div>
+          <div class="section-title">Plano de ação — próximos 30 dias</div>
+          <div id="plano-acao" style="margin-bottom:28px"></div>
 
-          <div class="success-box">
-            <div class="success-icon">✓</div>
-            <div class="success-title">Relatório a caminho!</div>
-            <div class="success-sub">
-              Em alguns minutos você recebe no e-mail seu diagnóstico completo com os gaps identificados e o plano de ação personalizado.<br><br>
-              Pronto para ir além do diagnóstico? A <strong>Comunidade Liderança Estratégica</strong> foi criada para líderes que querem parar de improvisar e começar a liderar com método, clareza e resultado. Acesso a conteúdo exclusivo, encontros ao vivo e uma rede de líderes que estão no mesmo caminho que você.
+          <div class="section-title">Seu perfil de liderança</div>
+          <div id="perfil-detalhe" style="margin-bottom:28px"></div>
+
+          <!-- CTA COMUNIDADE -->
+          <div style="background:linear-gradient(135deg,#101A4E 0%,#1a2a6e 100%);border-radius:20px;padding:32px;margin-bottom:0;position:relative;overflow:hidden">
+            <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(29,158,117,0.15)"></div>
+            <div style="position:absolute;bottom:-50px;left:-30px;width:150px;height:150px;border-radius:50%;background:rgba(201,168,76,0.08)"></div>
+            <div style="position:relative;z-index:1">
+              <div style="display:inline-block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#C9A84C;background:rgba(201,168,76,0.15);padding:4px 12px;border-radius:4px;margin-bottom:16px">Próximo passo</div>
+              <div style="font-family:'DM Serif Display',serif;font-size:24px;color:#ffffff;margin-bottom:10px;line-height:1.3">Pronto para ir além do diagnóstico?</div>
+              <div style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:20px">A <strong style="color:#ffffff">Comunidade Liderança Estratégica</strong> foi criada para líderes que querem parar de improvisar e começar a liderar com método, clareza e resultado. Acesso a conteúdo exclusivo, encontros ao vivo e uma rede de líderes que estão no mesmo caminho que você.</div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Método AVANCE aplicado</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Encontros ao vivo com Clésio</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Rede de líderes em evolução</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.7)"><span style="color:#1D9E75">✓</span> Ferramentas práticas todo mês</div>
+              </div>
+              <a href="https://clesiotheodoro.com.br/portaldalideranca01/" target="_blank" style="display:inline-block;padding:14px 28px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;background:#1D9E75;color:#ffffff;border-radius:12px;text-decoration:none;transition:opacity .2s">Fazer parte da Comunidade Liderança Estratégica →</a>
+              <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:10px">Acesso imediato · Comunidade exclusiva para líderes</div>
             </div>
-            <a class="btn-comunidade" href="https://clesiotheodoro.com.br/portaldalideranca01" target="_blank">
-              Faça Parte da Comunidade Liderança Estratégica →
-            </a>
-            <div class="btn-comunidade-note">Acesso imediato · Comunidade exclusiva para líderes</div>
           </div>
 
         </div>
+
       </div>
     </div>
 
@@ -712,42 +807,10 @@ var PERGUNTAS = [
 ];
 
 var PERSONAS = [
-  {
-    nome:"Líder Iniciante",
-    range:[0,35],
-    tagline:"Sua liderança ainda está se formando",
-    desc:"Você está nos primeiros passos da liderança. Ainda busca entender seu papel e muitas vezes se pergunta se está fazendo a coisa certa. Isso é completamente normal — todo grande líder passou por aqui.",
-    forcas:["Disposição genuína para aprender e evoluir","Proximidade com a equipe e vontade de ajudar","Energia e comprometimento com os resultados"],
-    gaps:["Dificuldade em delegar — tende a fazer tudo sozinho","Falta de clareza sobre o que priorizar como líder","Comunicação ainda pouco assertiva com o time"],
-    proximo:"Quando você desenvolver clareza de papel e começar a delegar com confiança, vai parar de trabalhar pelo time e começar a trabalhar através dele. Sua equipe vai crescer e você vai sobrar tempo para o que realmente importa."
-  },
-  {
-    nome:"Líder Bombeiro",
-    range:[36,55],
-    tagline:"Você vive apagando incêndios",
-    desc:"Você é dedicado e nunca deixa o barco afundar. O problema? Sua agenda é dominada por urgências e crises. No fim do dia você sente que trabalhou muito, mas avançou pouco.",
-    forcas:["Alta capacidade de resolução de problemas","Comprometimento total com o time e com os resultados","Resiliência em situações de alta pressão"],
-    gaps:["Gestão reativa: responde a crises em vez de preveni-las","Dificuldade em criar processos que evitem os incêndios","Pouco tempo dedicado ao desenvolvimento do time"],
-    proximo:"Quando você migrar de reativo para estratégico, os incêndios vão diminuir. Você vai construir um time que resolve problemas sem precisar de você — e vai finalmente trabalhar no negócio, não dentro dele."
-  },
-  {
-    nome:"Líder Executor",
-    range:[56,75],
-    tagline:"Você está saindo do operacional",
-    desc:"Você já saiu do caos. Tem processos funcionando e começa a enxergar a liderança com mais clareza. Mas ainda sente que o time depende de você para avançar e que falta algo para dar o próximo salto.",
-    forcas:["Capacidade de criar estrutura e organização","Visão de processo e execução consistente","Começa a desenvolver autonomia no time"],
-    gaps:["Ainda centraliza decisões importantes","Desenvolvimento ativo do time ainda é inconsistente","Visão estratégica de longo prazo ainda em construção"],
-    proximo:"Quando você desenvolver sua capacidade estratégica e de desenvolvimento de pessoas, vai construir um time de alta performance que executa com autonomia — liberando você para liderar com visão."
-  },
-  {
-    nome:"Líder Estratégico",
-    range:[76,100],
-    tagline:"Sua liderança está madura",
-    desc:"Você pensa à frente, desenvolve pessoas e constrói times que funcionam sem depender de você para cada decisão. É referência para o time e tem clareza sobre o impacto que quer gerar.",
-    forcas:["Visão estratégica clara e bem comunicada","Time com autonomia e senso de dono","Desenvolvimento consistente de pessoas"],
-    gaps:["Manter a consistência em momentos de alta pressão","Continuar evoluindo sem perder a essência da liderança","Escalar o modelo de liderança para toda a organização"],
-    proximo:"Líderes estratégicos que chegam ao topo são aqueles que nunca param de aprender e que constroem comunidades ao redor de suas ideias. O próximo nível é a liderança que se multiplica."
-  },
+  { nome:"Reativo", range:[0,35], tagline:"Sua liderança está no improviso", desc:"Você age sempre na urgência, sem método e sem rotina. O ponto de partida é estabelecer clareza mínima de papéis e criar uma rotina básica de acompanhamento." },
+  { nome:"Controlador", range:[36,55], tagline:"Você centraliza — e isso te trava", desc:"Você sabe fazer, mas tem dificuldade de estruturar para que outros façam. O foco agora é processo e delegação com clareza." },
+  { nome:"Estruturador", range:[56,75], tagline:"Você está saindo do operacional", desc:"Tem clareza e começa a criar processos. O próximo nível é consistência na execução e desenvolvimento ativo do time." },
+  { nome:"Estratégico", range:[76,100], tagline:"Sua liderança está madura", desc:"O time tem autonomia e o resultado aparece com consistência. O foco agora é escalar e desenvolver sucessores." },
 ];
 
 var GAP_MSGS = [
@@ -755,8 +818,7 @@ var GAP_MSGS = [
   { titulo:"Falta de processos documentados", sub:"A operação depende da memória das pessoas, não de padrões definidos." },
   { titulo:"Acompanhamento intermediário fraco", sub:"Você cobra no prazo final, não no meio do caminho — quando ainda dá para corrigir." },
   { titulo:"Desenvolvimento de pessoas em segundo plano", sub:"Falta feedback estruturado e um plano real para crescimento do time." },
-  { titulo:"Resultado sem métrica definida", sub:"
-Sem número, a avaliação fica no feeling. Sem número, não há evolução objetiva." },
+  { titulo:"Resultado sem métrica definida", sub:"Sem número, a avaliação fica no feeling. Sem número, não há evolução objetiva." },
 ];
 
 var atual = 0;
@@ -828,6 +890,16 @@ function avancar() {
 
 function mostrarResultado() {
   show("screen-result");
+  setTimeout(function() {
+    iniciarPolling();
+    setTimeout(function() {
+      if (!resultadoMostrado) {
+        var wrap = document.getElementById("btn-fallback-wrap");
+        if (wrap) wrap.style.display = "block";
+      }
+    }, 6000);
+  }, 2000);
+
   var scores = PILARES.map(function(_, i) {
     return pilCont[i] > 0 ? Math.round(pilPontos[i] / pilCont[i]) : 0;
   });
@@ -837,31 +909,6 @@ function mostrarResultado() {
   document.getElementById("r-persona").textContent = persona.nome;
   document.getElementById("r-tagline").textContent = persona.tagline;
   document.getElementById("r-desc").textContent = persona.desc;
-  window._quizScore = geral;
-  window._quizPersona = persona;
-  window._quizScores = scores;
-  window._quizGaps = scores.map(function(s,i){return{s:s,i:i};}).sort(function(a,b){return a.s-b.s;}).filter(function(g){return g.s < 70;}).slice(0,3);
-  if (window._quizGaps.length === 0) window._quizGaps = scores.map(function(s,i){return{s:s,i:i};}).sort(function(a,b){return a.s-b.s;}).slice(0,2);
-  var iframe = document.getElementById("tally-iframe");
-  if (iframe) {
-    iframe.src = "https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&Score=" + geral + "&Persona=" + encodeURIComponent(persona.nome);
-  }
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-window.addEventListener("message", function(e) {
-  if (e.data && e.data.type === "tally-form-submitted") {
-    document.getElementById("form-area").style.display = "none";
-    document.getElementById("resultado-completo").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    renderResultadoCompleto();
-  }
-});
-
-function renderResultadoCompleto() {
-  var scores = window._quizScores || [];
-  var gaps = window._quizGaps || [];
-  var persona = window._quizPersona || PERSONAS[0];
 
   var pilHtml = "";
   scores.forEach(function(s, i) {
@@ -873,6 +920,165 @@ function renderResultadoCompleto() {
   });
   document.getElementById("pilares-grid").innerHTML = pilHtml;
 
+  var sorted = scores.map(function(s,i){return{s:s,i:i};}).sort(function(a,b){return a.s-b.s;});
+  var gaps = sorted.filter(function(g){return g.s < 70;}).slice(0,3);
+  if (gaps.length === 0) gaps = sorted.slice(0,2);
+  var gapHtml = "";
+  gaps.forEach(function(g) {
+    gapHtml += '<div class="gap-item">' +
+      '<div class="gap-icon">' + PILARES_ICONS[g.i] + '</div>' +
+      '<div class="gap-text">' +
+        '<div class="gap-title">' + GAP_MSGS[g.i].titulo + '</div>' +
+        '<div class="gap-sub">' + GAP_MSGS[g.i].sub + '</div>' +
+      '</div></div>';
+  });
+  document.getElementById("gaps-list").innerHTML = gapHtml;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  window._quizScore = geral;
+  window._quizPersona = persona.nome;
+  window._quizScores = scores;
+  window._quizGaps = sorted.filter(function(g){return g.s < 70;}).slice(0,3);
+  if (window._quizGaps.length === 0) window._quizGaps = sorted.slice(0,2);
+
+  // Atualiza iframe com score e persona como parâmetros ocultos
+  var iframe = document.getElementById("tally-iframe");
+  if (iframe) {
+    iframe.src = "https://tally.so/embed/pbzLYZ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&Score=" + geral + "&Persona=" + encodeURIComponent(persona.nome);
+  }
+}
+
+function enviarLead() {
+  // Não usado mais — Tally iframe cuida do envio
+  // Mantido para compatibilidade
+}
+
+// Detectar submit do Tally — múltiplas estratégias
+var resultadoMostrado = false;
+
+function mostrarResultadoCompleto() {
+  if (resultadoMostrado) return;
+  resultadoMostrado = true;
+  document.getElementById("form-area").style.display = "none";
+  document.getElementById("resultado-completo").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  renderResultadoCompleto();
+}
+
+// Estratégia 1 — evento postMessage do Tally
+window.addEventListener("message", function(e) {
+  if (!e.data) return;
+  var d = e.data;
+  if (
+    d.type === "tally-form-submitted" ||
+    d.type === "tally:formSubmitted" ||
+    (d.formId && d.formId === "pbzLYZ") ||
+    (typeof d === "string" && d.indexOf("submitted") > -1)
+  ) {
+    setTimeout(mostrarResultadoCompleto, 800);
+  }
+});
+
+// Estratégia 2 — polling: checar altura do iframe
+// Quando Tally mostra "Thanks", o iframe muda de tamanho
+var alturaAnterior = 0;
+var pollingCount = 0;
+var pollingAtivo = false;
+
+function iniciarPolling() {
+  if (pollingAtivo) return;
+  pollingAtivo = true;
+  var intervalo = setInterval(function() {
+    pollingCount++;
+    if (pollingCount > 120) { clearInterval(intervalo); return; } // para após 60s
+    var iframe = document.getElementById("tally-iframe");
+    if (!iframe) return;
+    var alturaAtual = iframe.offsetHeight;
+    // Se o iframe encolheu (Tally mostra tela de thanks menor)
+    if (alturaAnterior > 0 && alturaAtual < alturaAnterior - 50) {
+      clearInterval(intervalo);
+      setTimeout(mostrarResultadoCompleto, 600);
+      return;
+    }
+    if (alturaAtual > 0) alturaAnterior = alturaAtual;
+  }, 500);
+}
+
+// Estratégia 3 — botão manual fixo no HTML (não dinâmico)
+function criarBotaoFallback() {
+  // Não cria botão dinamicamente — já existe no HTML
+}
+
+// Iniciar quando chegar na tela de resultado
+document.addEventListener("DOMContentLoaded", function() {
+  setTimeout(function() {
+    if (document.getElementById("tally-iframe")) {
+      iniciarPolling();
+      // Mostrar botão fixo após 6 segundos
+      setTimeout(function() {
+        if (!resultadoMostrado) {
+          var wrap = document.getElementById("btn-fallback-wrap");
+          if (wrap) wrap.style.display = "block";
+        }
+      }, 6000);
+    }
+  }, 3000);
+});
+
+var PLANOS_ACAO = {
+  0: [ // Reativo
+    { titulo: "Definir papéis e responsabilidades por escrito", desc: "Liste cada pessoa do time e escreva em uma frase o que ela é responsável por entregar. Sem clareza de papel, não há como cobrar resultado.", quando: "Esta semana" },
+    { titulo: "Criar uma rotina de alinhamento semanal", desc: "Reserve 30 minutos toda segunda-feira para alinhar prioridades com o time. Não é reunião de status — é clareza de direção para a semana.", quando: "A partir de agora" },
+    { titulo: "Escolher uma tarefa para delegar completamente", desc: "Identifique uma tarefa que você ainda faz que poderia ser feita por alguém do time. Delegue com clareza: o quê, como, quando e como será avaliado.", quando: "Nos próximos 7 dias" },
+    { titulo: "Aplicar o MAPA na próxima demanda do time", desc: "Antes de passar qualquer tarefa, defina: Meta (o que precisa ser entregue), Ator (quem é responsável), Prazo (data real) e Avaliação (como medir). Isso substitui o improviso por estrutura.", quando: "Na próxima tarefa" },
+    { titulo: "Fazer um diagnóstico RAIZ do problema mais recorrente", desc: "Pegue o problema que mais se repete na sua equipe e faça as 4 perguntas do RAIZ: O que está acontecendo? Há quanto tempo? O que já foi tentado? Quando o problema não acontece?", quando: "Esta semana" },
+  ],
+  1: [ // Controlador
+    { titulo: "Mapear o que só você faz e que outros poderiam fazer", desc: "Faça uma lista de tudo que passa pela sua mão. Marque o que só você pode fazer de verdade — o resto é candidato a delegação.", quando: "Nos próximos 3 dias" },
+    { titulo: "Documentar o processo da tarefa mais repetida do time", desc: "Escolha a tarefa que mais se repete e escreva o passo a passo de como ela deve ser feita. Isso libera você de ter que ensinar toda vez.", quando: "Esta semana" },
+    { titulo: "Delegar com o método MAPA — não no improviso", desc: "Na próxima delegação, use o MAPA: defina Meta, Ator, Prazo e como vai Avaliar. Delegação sem estrutura gera retrabalho e dependência.", quando: "Na próxima oportunidade" },
+    { titulo: "Fazer um check-in de acompanhamento no meio do prazo", desc: "Em vez de esperar o resultado final, acompanhe no meio do caminho. Isso previne erro antes que vire problema — e reduz a necessidade de você resolver no final.", quando: "A implementar agora" },
+    { titulo: "Dar feedback estruturado com o CPC para um comportamento que precisa mudar", desc: "Escolha uma situação que precisa de correção e aplique o CPC: Contexto (o que aconteceu), Padrão (o que era esperado) e Consequência (qual foi o impacto). Corrija sem conflito.", quando: "Esta semana" },
+  ],
+  2: [ // Estruturador
+    { titulo: "Revisar os processos existentes com o time", desc: "Processos que existem só no papel não funcionam. Reúna o time, revise o que está documentado e valide o que realmente é seguido — ajuste o que não é.", quando: "Nos próximos 15 dias" },
+    { titulo: "Criar um indicador de resultado para cada membro do time", desc: "Cada pessoa precisa ter pelo menos um número para acompanhar. Sem indicador, a avaliação fica no feeling. Com indicador, a conversa é objetiva.", quando: "Esta semana" },
+    { titulo: "Iniciar um plano de desenvolvimento individual para 1 pessoa do time", desc: "Escolha quem tem mais potencial e crie um plano simples: onde está, onde pode chegar, o que vai aprender e quando. Desenvolvimento estruturado retém talento.", quando: "Nos próximos 7 dias" },
+    { titulo: "Aplicar o F.A.R.O. para fortalecer sua influência", desc: "Avalie as 4 dimensões: Firmeza (você mantém o que decide?), Autenticidade (faz o que prega?), Referência (demonstra competência?) e Orientação (o time sabe para onde vai?). Identifique qual está mais fraca e aja.", quando: "Esta semana" },
+    { titulo: "Criar uma rotina de feedback mensal com cada pessoa", desc: "Reserve 30 minutos por mês para uma conversa individual com cada membro do time — não sobre tarefas, mas sobre evolução e desenvolvimento. Consistência aqui muda o nível do time.", quando: "A partir deste mês" },
+  ],
+  3: [ // Estratégico
+    { titulo: "Mapear quem pode ser seu sucessor em cada função crítica", desc: "Um time estratégico tem redundância. Identifique quem poderia assumir cada função crítica se necessário — e invista em desenvolver essa pessoa agora.", quando: "Nos próximos 30 dias" },
+    { titulo: "Criar um painel de indicadores para acompanhar o time em alto nível", desc: "Com 4 ou 5 métricas-chave, você acompanha o resultado do time sem precisar mergulhar no operacional. Defina quais são essas métricas e revise semanalmente.", quando: "Esta semana" },
+    { titulo: "Delegar a liderança de um projeto inteiro para alguém do time", desc: "O próximo nível é desenvolver outros líderes dentro do time. Escolha um projeto e delegue a liderança completa para alguém — com suporte, não com controle.", quando: "No próximo projeto" },
+    { titulo: "Compartilhar a visão de 90 dias com todo o time", desc: "Times estratégicos sabem para onde estão indo. Apresente os objetivos dos próximos 3 meses de forma clara e conecte o trabalho de cada pessoa a esse resultado maior.", quando: "Esta semana" },
+    { titulo: "Criar um ritual de aprendizado contínuo para o time", desc: "Reserve 1 hora por mês para o time compartilhar o que aprendeu, o que funcionou e o que pode melhorar. Isso cria cultura de evolução contínua sem depender só de treinamento externo.", quando: "A partir deste mês" },
+  ],
+};
+
+var PERFIS_DETALHE = [
+  { nome: "Reativo", desc: "Você opera constantemente no modo urgência. A liderança acontece no improviso — você resolve o que aparece, não o que importa. O problema não é falta de esforço: é falta de estrutura. Sem rotina, sem processo e sem clareza de papéis, o resultado depende sempre de você estar presente.", evolucao: "De onde você sai:", proximo: "O próximo passo é sair do apagar incêndio e criar a estrutura mínima para a equipe funcionar sem depender de você o tempo todo. Começa pela clareza de papéis e por uma rotina semanal de alinhamento." },
+  { nome: "Controlador", desc: "Você sabe fazer — e esse é exatamente o problema. Como você faz bem, é difícil deixar outros fazerem. O resultado: você vira o gargalo da operação. A equipe depende de você para decidir, aprovar e resolver. Sua liderança está centralizada demais.", evolucao: "De onde você sai:", proximo: "O próximo passo é criar processos que permitam que outros façam — e confiar neles para isso. Delegação com estrutura (MAPA) e acompanhamento no meio do caminho, não só no resultado final." },
+  { nome: "Estruturador", desc: "Você está no caminho certo. Já tem clareza do papel de cada um, já delegou algumas coisas com método e está saindo do operacional. O desafio agora é consistência — manter a estrutura funcionando mesmo quando a pressão aumenta.", evolucao: "De onde você sai:", proximo: "O próximo nível é desenvolver pessoas ativamente e criar um time que aprende sozinho. Feedback estruturado, plano de desenvolvimento individual e indicadores claros são as ferramentas desse estágio." },
+  { nome: "Estratégico", desc: "Sua liderança está madura. O time tem autonomia, os processos funcionam e o resultado aparece com consistência — mesmo quando você não está em cima. Você opera no nível certo: na estratégia, não no operacional.", evolucao: "De onde você sai:", proximo: "O próximo desafio é escalar essa cultura. Desenvolver outros líderes dentro do time, criar sucessores e expandir o resultado para além da sua presença direta. É aqui que a liderança vira legado." },
+];
+
+function renderResultadoCompleto() {
+  var scores = window._quizScores || [];
+  var gaps = window._quizGaps || [];
+  var geral = window._quizScore || 0;
+
+  // Pilares
+  var pilHtml = "";
+  scores.forEach(function(s, i) {
+    pilHtml += '<div class="pilar-row">' +
+      '<div class="pilar-name">' + PILARES[i] + '</div>' +
+      '<div class="pilar-track"><div class="pilar-fill" style="width:' + s + '%;background:' + getColor(s) + '"></div></div>' +
+      '<div class="pilar-score" style="color:' + getColor(s) + '">' + s + '</div>' +
+      '</div>';
+  });
+  document.getElementById("pilares-grid").innerHTML = pilHtml;
+
+  // Gaps
   var gapHtml = "";
   gaps.forEach(function(g) {
     gapHtml += '<div class="gap-item">' +
@@ -884,25 +1090,34 @@ function renderResultadoCompleto() {
   });
   document.getElementById("gaps-list").innerHTML = gapHtml;
 
-  var perfilHtml =
-    '<div style="margin-bottom:16px">' +
-      '<div class="perfil-bloco-titulo">✦ Quem você é como líder</div>' +
-      '<p style="font-size:13px;color:var(--text);line-height:1.6">' + persona.desc + '</p>' +
-    '</div>' +
-    '<div style="margin-bottom:16px">' +
-      '<div class="perfil-bloco-titulo">💪 Seus pontos fortes</div>' +
-      persona.forcas.map(function(f){ return '<div class="perfil-bloco-item"><span>✓</span><span>' + f + '</span></div>'; }).join('') +
-    '</div>' +
-    '<div style="margin-bottom:16px">' +
-      '<div class="perfil-bloco-titulo">⚠ Seus gaps prioritários</div>' +
-      persona.gaps.map(function(g){ return '<div class="perfil-bloco-item"><span>→</span><span>' + g + '</span></div>'; }).join('') +
-    '</div>' +
-    '<div>' +
-      '<div class="perfil-bloco-titulo">🎯 Seu próximo nível</div>' +
-      '<p style="font-size:13px;color:var(--text);line-height:1.6">' + persona.proximo + '</p>' +
+  // Perfil index
+  var pIdx = geral <= 35 ? 0 : geral <= 55 ? 1 : geral <= 75 ? 2 : 3;
+
+  // Plano de ação detalhado
+  var plano = PLANOS_ACAO[pIdx];
+  var planoHtml = "";
+  plano.forEach(function(a, i) {
+    planoHtml += '<div class="acao-item">' +
+      '<div class="acao-num">' + (i+1) + '</div>' +
+      '<div class="acao-body">' +
+        '<div class="acao-titulo">' + a.titulo + '</div>' +
+        '<div class="acao-desc">' + a.desc + '</div>' +
+        '<span class="acao-quando">' + a.quando + '</span>' +
+      '</div></div>';
+  });
+  document.getElementById("plano-acao").innerHTML = '<div style="background:var(--white);border:1px solid var(--border);border-radius:16px;padding:16px 20px">' + planoHtml + '</div>';
+
+  // Perfil detalhado
+  var perfil = PERFIS_DETALHE[pIdx];
+  document.getElementById("perfil-detalhe").innerHTML =
+    '<div class="perfil-box">' +
+      '<div class="perfil-nome">Líder ' + perfil.nome + '</div>' +
+      '<div class="perfil-desc">' + perfil.desc + '</div>' +
+      '<div class="perfil-evolucao">' + perfil.evolucao + '</div>' +
+      '<div class="perfil-proximo">' + perfil.proximo + '</div>' +
     '</div>';
-  document.getElementById("perfil-detalhe").innerHTML = perfilHtml;
 }
 </script>
+
 </body>
 </html>
